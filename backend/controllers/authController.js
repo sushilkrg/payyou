@@ -1,9 +1,11 @@
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+// import jwt from "jsonwebtoken";
 import User from "../models/User.model.js";
 import OTP from "../models/VerificationCode.model.js";
 import { generateOtp } from "../utils/generateOtp.js";
 import { sendMail } from "../utils/sendMail.js";
+// import { generateWalletId } from "./walletController.js";
+import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
 
 export const register = async (req, res) => {
   try {
@@ -64,6 +66,9 @@ export const verifyOtp = async (req, res) => {
     // Delete OTP
     await OTP.deleteMany({ email });
 
+    // generate WalletId
+    // generateWalletId();
+
     res.status(200).json({ message: "Email verified successfully" });
   } catch (err) {
     res
@@ -83,19 +88,20 @@ export const login = async (req, res) => {
     if (!isMatch)
       return res.status(400).json({ message: "Invalid Credentials" });
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+    generateTokenAndSetCookie(user?._id, res);
+
+    // const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+    //   expiresIn: "1d",
+    // });
 
     res.status(200).json({
       message: "Login Successful",
-      token,
       user: {
+        _id: user._id,
         name: user.name,
         email: user.email,
         walletId: user.walletId,
         balance: user.balance,
-        id: user._id,
       },
     });
   } catch (err) {

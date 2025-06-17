@@ -1,5 +1,5 @@
 import express from "express";
-import { protect } from "../middlewares/authMiddleware.js";
+import { isAuthenticated } from "../middlewares/authMiddleware.js";
 import {
   addMoney,
   generateWalletId,
@@ -8,7 +8,7 @@ import {
 } from "../controllers/walletController.js";
 
 const router = express.Router();
-router.use(protect);
+router.use(isAuthenticated);
 
 router.post("/generate", generateWalletId);
 router.get("/me", getWalletInfo);
