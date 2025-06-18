@@ -33,7 +33,7 @@ export const generateWalletId = async (req, res) => {
 
 export const getWalletInfo = async (req, res) => {
   res.json({
-    walletInfo: req.user.walletId,
+    walletId: req.user.walletId,
     balance: req.user.balance,
     email: req.user.email,
     name: req.user.name,
