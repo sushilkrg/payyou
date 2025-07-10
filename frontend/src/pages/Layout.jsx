@@ -49,7 +49,7 @@ const Layout = ({ children }) => {
                   navigate(item.path)
                   setShowSidebar(false);
                 }}
-                className={`block w-full border-b border-gray-400 text-left px-2 py-3 cursor-pointer hover:bg-green-100 ${activeTab === item.label ? "bg-green-200" : ""
+                className={`block w-full border-b border-gray-400 text-left px-2 py-3 cursor-pointer hover:bg-gray-200 ${activeTab === item.label ? "bg-gray-600 text-white hover:bg-gray-600" : ""
                   }`}
               >
                 {item.label}

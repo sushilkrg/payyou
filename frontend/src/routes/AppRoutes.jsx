@@ -13,22 +13,24 @@ import Transactions from '../pages/Transactions'
 import Settings from '../pages/Settings'
 import Support from '../pages/Support'
 import VerifyOtp from '../pages/VerifyOtp'
+import GenerateWalletId from '../pages/GenerateWalletId'
 
 const AppRoutes = () => {
 
-    const user = "abcd";
+    const user = "";
 
     return (
         <Routes>
-            <Route path='/' element={user ? <Navigate to="/app" /> :<Home />} />
+            <Route path='/' element={user ? <Navigate to="/app" /> : <Home />} />
             <Route path='/signup' element={<Signup />} />
             <Route path='/login' element={<Login />} />
             <Route path='/verify' element={<VerifyOtp />} />
 
             <Route element={<ProtectedRoutes />}>
                 <Route path="/app" element={<Layout />}>
-                    <Route index  element={<Dashboard />} />
+                    <Route index element={<Dashboard />} />
                     <Route path="dashboard" element={<Dashboard />} />
+                    <Route path='generate' element={<GenerateWalletId />} />
                     <Route path="send-money" element={<SendMoney />} />
                     <Route path="add-money" element={<AddMoney />} />
                     {/* <Route path="/wallet" element={<Wallet/>}/> */}

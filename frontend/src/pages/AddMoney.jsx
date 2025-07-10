@@ -1,14 +1,29 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { addMoney } from '../services/walletService';
+import { useDispatch, useSelector } from 'react-redux';
 
 const AddMoney = () => {
 
   const [amount, setAmount] = useState("");
-
-  const amountSuggestions = ['100', '200', '500']
+  // const balance = useSelector(store => store.auth.user.balance)
+  // const dispatch = useDispatch();
+  const amountSuggestions = [100, 200, 500]
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      console.log("amount to be sent-", amount);
+      const res = await addMoney(JSON.stringify({ amount }));
+      if (res.data) {
+        console.log("amount added-", res.data);
+        setAmount("")
+        // update balance based on res.data.balance
+        // dispatch()
+
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -16,12 +31,12 @@ const AddMoney = () => {
       <form onSubmit={handleSubmit} className='space-y-6'>
         <div>
           <label htmlFor="amount" className="block text-sm font-medium text-gray-700">Enter Amount</label>
-          <input type="text" name='amount' placeholder='Enter amount' value={amount} onChange={(e) => setAmount(e.target.value)} required
+          <input type="number" name='amount' placeholder='Enter amount' value={amount} onChange={(e) => setAmount(e.target.value)} required
             className="w-full mt-1 text-black px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
         </div>
         <div>
           {amountSuggestions.map(amountSuggestion => (
-            <button onClick={() => setAmount(amountSuggestion)} className='border rounded-3xl text-md font-semibold text-gray-500 px-4 py-0.5 mx-2 cursor-pointer'>{amountSuggestion}</button>
+            <button type="button" onClick={() => setAmount(amountSuggestion)} key={amountSuggestion} className='border rounded-3xl text-md font-semibold text-gray-500 px-4 py-0.5 mx-2 cursor-pointer'>{amountSuggestion}</button>
           ))}
         </div>
         <div className='flex justify-center items-center'>
