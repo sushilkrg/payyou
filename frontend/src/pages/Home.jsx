@@ -8,8 +8,8 @@ const Home = () => {
     <div className=''>
       <div className='min-h-112 flex items-center justify-center bg-white text-blue-900'>
         <div className='container mx-auto flex items-center justify-center flex-col gap-3'>
-          <p className='text-7xl font-bold'>Pay easy, fast</p>
-          <p className='text-7xl font-bold'>and secure.</p>
+          <p className='text-5xl md:text-7xl font-bold'>Pay easy, fast</p>
+          <p className='text-5xl md:text-7xl font-bold'>and secure.</p>
           <p className='border rounded-full bg-blue-800 text-white px-6 py-2 mt-2 font-semibold'>Start your payment</p>
         </div>
       </div>
@@ -33,7 +33,7 @@ const Home = () => {
         </div>
       </div>
 
-      <div className='min-h-156 md:min-h-128 flex items-center justify-center bg-gradient-to-b from-blue-950 to-blue-900 text-white'>
+      <div className='min-h-184 md:min-h-128 flex items-center justify-center bg-gradient-to-b from-blue-950 to-blue-900 text-white'>
         <div className='container mx-auto px-12 flex items-center justify-center flex-col md:flex-row gap-auto lg:gap-10'>
           <img src="https://www.paypalobjects.com/marketing/web23/in/ql/homepage-consumer/homepage-consumer-split-section1-image.png?quality=75&width=300" alt="image" className='w-80 h-80 object-cover' />
           <div className='flex flex-col items-center justify-center lg:w-156'>
