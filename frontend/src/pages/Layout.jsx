@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
+import { useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 
 const navItems = [
@@ -11,18 +12,26 @@ const navItems = [
   { label: "Transactions", path: "transactions" },
   { label: "Settings", path: "settings" },
   { label: "Support", path: "support" },
-  // { label: "Logout", path: "logout" },
+  // { label: "Generate", path: "generate" },
 ];
 
 const Layout = ({ children }) => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [activeTab, setActiveTab] = useState("Dashboard");
 
+  const user = useSelector(store => store.auth.user);
+
   const navigate = useNavigate();
 
   const handleToggle = () => {
     setShowSidebar(!showSidebar);
   };
+
+  useEffect(() => {
+    if (!user || !user?.walletId) {
+      navigate("generate");
+    }
+  }, [user, navigate]);
 
   return (
     <div className="min-h-screen container mx-auto">

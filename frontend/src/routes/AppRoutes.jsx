@@ -14,10 +14,11 @@ import Settings from '../pages/Settings'
 import Support from '../pages/Support'
 import VerifyOtp from '../pages/VerifyOtp'
 import GenerateWalletId from '../pages/GenerateWalletId'
+import { useSelector } from 'react-redux'
 
 const AppRoutes = () => {
 
-    const user = "";
+    const user = useSelector(store => store.auth.user);
 
     return (
         <Routes>

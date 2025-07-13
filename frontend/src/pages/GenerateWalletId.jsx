@@ -1,18 +1,22 @@
+import { useSelector } from 'react-redux';
 import { generateWalletId } from '../services/walletService'
+import { useNavigate } from 'react-router-dom';
 
 const GenerateWalletId = () => {
 
+    const navigate = useNavigate();
+    const user = useSelector(store => store?.auth.user);
+
     const handleGenerateWalletId = async (e) => {
         try {
-            console.log("generate button clicked");
-
-            // const res = await generateWalletId();
-            // if (res.data) {
-            //     console.log(res.data.message);
-
+            const res = await generateWalletId();
+            if (res.data) {
+                // use store to store walletId in user
+                
+                navigate("dashboard")
+            }
         } catch (error) {
             console.log("Generate walletid-", error);
-
         }
     }
 
