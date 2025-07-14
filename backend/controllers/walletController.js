@@ -48,7 +48,7 @@ export const addMoney = async (req, res) => {
       return res.status(400).json({ message: "Amount must be positive" });
     }
 
-    req.user.balance += amount;
+    req.user.balance += +(amount);
     await req.user.save();
 
     await Transaction.create({
