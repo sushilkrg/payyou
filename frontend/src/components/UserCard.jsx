@@ -1,8 +1,10 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import useGetInfo from '../hooks/useGetInfo'
 
 const UserCard = () => {
 
+  useGetInfo()
   const user = useSelector(store => store.auth.user)
 
   return (

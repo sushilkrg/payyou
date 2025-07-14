@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from "react-redux";
 import { loginUser } from '../services/authService';
-import { login } from '../features/auth/authSlice';
+import { setUser } from '../features/auth/authSlice';
 
 const Login = () => {
 
@@ -24,7 +24,7 @@ const Login = () => {
     try {
       const res = await loginUser(formData)
       if (res.data) {
-        dispatch(login(res.data?.user))
+        dispatch(setUser(res.data?.user))
         navigate("/app")
       }
     } catch (error) {

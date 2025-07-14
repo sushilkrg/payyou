@@ -27,12 +27,12 @@ const AddMoney = () => {
   }
 
   return (
-    <div className='bg-white w-full md:w-96 py-8 md:px-8 px-6 shadow rounded-lg'>
+    <div className='bg-white w-full min-h-[80vh] flex justify-center py-16 md:px-8 px-6 shadow rounded-lg'>
       <form onSubmit={handleSubmit} className='space-y-6'>
         <div>
           <label htmlFor="amount" className="block text-sm font-medium text-gray-700">Enter Amount</label>
           <input type="number" name='amount' placeholder='Enter amount' value={amount} onChange={(e) => setAmount(e.target.value)} required
-            className="w-full mt-1 text-black px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+            className="w-64 mt-1 text-black px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
         </div>
         <div>
           {amountSuggestions.map(amountSuggestion => (

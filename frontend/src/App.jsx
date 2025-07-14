@@ -6,7 +6,7 @@ import Footer from "./components/Footer"
 import Navbar from "./components/Navbar"
 import AppRoutes from "./routes/AppRoutes"
 import { store } from "./app/store"
-import { login } from "./features/auth/authSlice";
+import { setUser } from "./features/auth/authSlice";
 
 function App() {
 
@@ -14,7 +14,7 @@ function App() {
   // console.log(storedUser);
 
   if (storedUser) {
-    store.dispatch(login(JSON.parse(storedUser)))
+    store.dispatch(setUser(JSON.parse(storedUser)))
   }
 
 
