@@ -11,7 +11,7 @@ const router = express.Router();
 router.use(isAuthenticated);
 
 router.post("/generate", generateWalletId);
-router.get("/me", getWalletInfo);
+router.get("/", getWalletInfo);
 router.post("/add", addMoney);
 router.post("/send", sendMoney);
 

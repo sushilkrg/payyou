@@ -33,10 +33,11 @@ export const generateWalletId = async (req, res) => {
 
 export const getWalletInfo = async (req, res) => {
   res.json({
+    _id: req.user._id,
+    name: req.user.name,
+    email: req.user.email,
     walletId: req.user.walletId,
     balance: req.user.balance,
-    email: req.user.email,
-    name: req.user.name,
   });
 };
 
@@ -48,7 +49,7 @@ export const addMoney = async (req, res) => {
       return res.status(400).json({ message: "Amount must be positive" });
     }
 
-    req.user.balance += +(amount);
+    req.user.balance += +amount;
     await req.user.save();
 
     await Transaction.create({
