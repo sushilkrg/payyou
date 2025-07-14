@@ -11,11 +11,70 @@ export const getMyTransactions = async (req, res) => {
       query.type = type; // 'add', 'send', 'receive'
     }
 
-    const transaction = await Transaction.find(query)
-      .sort({ createdAt: -1 })
-      .limit(100);
+    const walletId = req.user.walletId;
+    const transactions = await Transaction.aggregate([
+      //  Match only transactions where the logged-in user is involved
+      {
+        $match: {
+          $or: [
+            { type: "send", fromWallet: walletId },
+            { type: "receive", toWallet: walletId },
+            { type: "add", toWallet: walletId },
+          ],
+        },
+      },
 
-    res.status(200).json({ transaction });
+      { $sort: { createdAt: -1 } },
+      { $limit: 100 },
+
+      // Lookup fromUser
+      {
+        $lookup: {
+          from: "users",
+          localField: "fromWallet",
+          foreignField: "walletId",
+          as: "fromUser",
+        },
+      },
+      {
+        $unwind: {
+          path: "$fromUser",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+
+      //  Lookup toUser
+      {
+        $lookup: {
+          from: "users",
+          localField: "toWallet",
+          foreignField: "walletId",
+          as: "toUser",
+        },
+      },
+      {
+        $unwind: {
+          path: "$toUser",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+
+      // Final fields to return
+      {
+        $project: {
+          type: 1,
+          amount: 1,
+          status: 1,
+          createdAt: 1,
+          fromWallet: 1,
+          toWallet: 1,
+          fromName: "$fromUser.name",
+          toName: "$toUser.name",
+        },
+      },
+    ]);
+
+    res.status(200).json({ transactions });
   } catch (err) {
     return res
       .status(500)
