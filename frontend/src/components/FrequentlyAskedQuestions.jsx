@@ -28,7 +28,7 @@ const FrequentlyAskedQuestions = () => {
   };
 
   return (
-    <section className="bg-white text-blue-900 my-16 px-4 py-10">
+    <section className="bg-white text-teal-900 my-16 px-4 py-10">
       <div className="container mx-auto lg:w-164">
         <h2 className="text-center text-4xl md:text-5xl font-bold mb-6 pb-8">Frequently Asked Questions</h2>
 
@@ -39,7 +39,7 @@ const FrequentlyAskedQuestions = () => {
               onClick={() => toggleFAQ(index)}
               className="flex justify-between items-center w-full text-left cursor-pointer"
             >
-              <span className="font-medium text-xl text-blue-900">{faq.question}</span>
+              <span className="font-medium text-xl text-teal-900">{faq.question}</span>
               {activeIndex === index ? (
                 <FaMinus className="h-4 w-4" />
               ) : (

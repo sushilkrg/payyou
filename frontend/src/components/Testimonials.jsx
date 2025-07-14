@@ -31,7 +31,7 @@ const Testimonials = () => {
   return (
     <section className="px-4 py-12 bg-white min-h-auto">
       <div className="max-w-6xl my-16 mx-auto">
-        <h2 className='text-5xl text-blue-900 font-bold text-center'>Testimonials</h2>
+        <h2 className='text-5xl text-teal-900 font-bold text-center'>Testimonials</h2>
         <h2 className="text-gray-400 text-xl font-semibold mt-4 mb-10 text-center">What our customers say about us</h2>
 
         <Swiper
