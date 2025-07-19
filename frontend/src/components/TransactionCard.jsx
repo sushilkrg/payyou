@@ -3,7 +3,7 @@ const TransactionCard = ({ transaction }) => {
   // console.log(transaction);
 
   return (
-    <div className='flex justify-between items-center mt-2 bg-white w-full py-4 px-6 shadow rounded-lg'>
+    <div className='flex justify-between items-center lg:px-16 xl:px-24 mt-2 bg-white w-full py-4 px-6 shadow rounded-lg'>
       <div className='flex items-center gap-2'>
         <div>{transaction.type === "add"
           ? "➕"
@@ -14,7 +14,7 @@ const TransactionCard = ({ transaction }) => {
               : ""}
         </div>
         <div className='flex flex-col lg:items-center lg:flex-row lg:gap-2'>
-          <p className='text-sm text-gray-600'>
+          <p className='text-sm text-gray-500'>
             {transaction.type === "add"
               ? "added to"
               : transaction.type === "send"
@@ -23,7 +23,7 @@ const TransactionCard = ({ transaction }) => {
                   ? "received from"
                   : ""}
           </p>
-          <p> {transaction.type === "add"
+          <p className="text-lg"> {transaction.type === "add"
             ? `${transaction.toName}`
             : transaction.type === "send"
               ? `${transaction.toName}`
