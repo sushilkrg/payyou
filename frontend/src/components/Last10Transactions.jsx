@@ -10,16 +10,11 @@ const Last10Transactions = () => {
   const transactionsList = async () => {
     try {
       const res = await getMyTransactions();
-      // console.log(res.data.transactions);
-
       setTransactionData(res.data.transactions);
-
     } catch (error) {
       console.log("error in transaction list - ", error);
-
     }
   }
-  // console.log(transactionData);
 
   useEffect(() => {
     transactionsList()
@@ -27,9 +22,13 @@ const Last10Transactions = () => {
 
   if (transactionData?.length == 0) {
     return (
-      <div className='text-center mt-16'>
-        <h3>No data available.</h3>
+      <div className='bg-white mt-4 w-full py-8 md:px-8 px-6 shadow rounded-lg'>
+        <h1 className='font-bold'>Your last 10 transactions</h1>
+        <div className='text-center mt-16'>
+          <h3>No data available.</h3>
+        </div>
       </div>
+
     )
   }
 
@@ -37,7 +36,7 @@ const Last10Transactions = () => {
     <div className='bg-white mt-4 w-full py-8 md:px-8 px-6 shadow rounded-lg'>
       <h1 className='font-bold'>Your last 10 transactions</h1>
       {/* {!transactionData && <p>Loading...</p>} */}
-      {transactionData?.map((transaction) => (
+      {transactionData?.slice(0, 10).map((transaction) => (
         <TransactionCard key={transaction._id} transaction={transaction} />
       ))}
       <Link to="/app/transactions" className='text-center'>
