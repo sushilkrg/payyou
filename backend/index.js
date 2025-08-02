@@ -6,6 +6,7 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import walletRoutes from "./routes/walletRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
+import healthRoutes from "./routes/healthRoutes.js";
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use(cors(corsOptions));
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/wallet", walletRoutes);
 app.use("/api/v1/transactions", transactionRoutes);
+app.use("/api/v1/health", healthRoutes);
 
 connectDB().then(() => {
   app.listen(PORT, () => console.log(`Server running at port ${PORT}`));
