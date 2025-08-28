@@ -1,5 +1,6 @@
 import React from 'react'
-import girlImage from "../assets/girl.jpg"
+import girlImage from "../assets/girl.webp"
+import twoPeopleImage from "../assets/two-people.webp"
 import Testimonials from '../components/Testimonials'
 import FrequentlyAskedQuestions from '../components/FrequentlyAskedQuestions'
 
@@ -35,7 +36,7 @@ const Home = () => {
 
       <div className='min-h-184 md:min-h-128 flex items-center justify-center bg-gradient-to-b from-teal-950 to-teal-900 text-white'>
         <div className='container mx-auto px-12 flex items-center justify-center flex-col md:flex-row gap-4 lg:gap-10'>
-          <img src="https://media.istockphoto.com/id/2218465056/photo/cheerful-couple-laughing-and-pointing-at-smartphone-at-home.jpg?s=612x612&w=0&k=20&c=GqUACvfoEcTjrpl8C_8YG5DvT9qKjROXCQz5hkPl3jA=" alt="image" className='w-80 h-80 object-cover rounded-2xl' />
+          <img src={twoPeopleImage} alt="image" className='w-80 h-80 object-cover rounded-2xl' />
           <div className='flex flex-col items-center justify-center lg:w-156'>
             <h2 className='text-4xl lg:text-5xl font-bold text-center mb-4'>Pay Anyone, Anywhere</h2>
             <p className='font-medium mt-4 px-4 text-center'>Whether you’re shopping nearby or paying someone for a project, Payyou makes sending money simple and stress-free.</p>
