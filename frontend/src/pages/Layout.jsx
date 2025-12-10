@@ -43,13 +43,13 @@ const Layout = ({ children }) => {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-[200px_1fr]">
+      <div className="grid grid-cols-1 md:grid-cols-[250px_1fr]">
         {/* Sidebar */}
         <aside
-          className={`fixed md:static bg-white top-0 left-0 h-full z-50 w-[200px]  border-r border-gray-700 transform ${showSidebar ? "translate-x-0" : "-translate-x-full"
+          className={`fixed md:static bg-white top-0 left-0 h-full z-50 w-[98%]  border-r border-gray-300 transform ${showSidebar ? "translate-x-0" : "-translate-x-full"
             } md:translate-x-0 transition-transform duration-300 ease-in-out`}
         >
-          <div className="pt-16 md:pt-1 pl-4 text-sm font-semibold ">
+          <div className="pt-16 md:pt-0.5 pl-4 text-sm font-semibold ">
             {navItems.map((item) => (
               <button
                 key={item.label}
@@ -58,7 +58,7 @@ const Layout = ({ children }) => {
                   navigate(item.path)
                   setShowSidebar(false);
                 }}
-                className={`block w-full border-b border-gray-400 text-left px-2 py-3 cursor-pointer hover:bg-gray-200 ${activeTab === item.label ? "bg-gray-600 text-white hover:bg-gray-600" : ""
+                className={`block w-full md:w-[95%] md:rounded-sm border-gray-400 text-left px-4 py-3 mb-2 cursor-pointer hover:bg-gray-200 ${activeTab === item.label ? "bg-gray-600 text-white hover:bg-gray-600" : ""
                   }`}
               >
                 {item.label}
@@ -77,3 +77,6 @@ const Layout = ({ children }) => {
 };
 
 export default Layout;
+
+
+

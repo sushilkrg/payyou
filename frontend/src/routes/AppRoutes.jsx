@@ -15,6 +15,8 @@ import Support from '../pages/Support'
 import VerifyOtp from '../pages/VerifyOtp'
 import GenerateWalletId from '../pages/GenerateWalletId'
 import { useSelector } from 'react-redux'
+import PaymentSuccessful from '../pages/PaymentSuccess'
+import PaymentCancelled from '../pages/PaymentCancel'
 
 const AppRoutes = () => {
 
@@ -26,6 +28,8 @@ const AppRoutes = () => {
             <Route path='/signup' element={<Signup />} />
             <Route path='/login' element={<Login />} />
             <Route path='/verify' element={<VerifyOtp />} />
+            <Route path='/payment-success' element={<PaymentSuccessful />} />
+            <Route path='/payment-cancel' element={<PaymentCancelled />} />
 
             <Route element={<ProtectedRoutes />}>
                 <Route path="/app" element={<Layout />}>

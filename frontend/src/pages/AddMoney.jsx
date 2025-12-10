@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { addMoney } from '../services/walletService';
-import { useDispatch, useSelector } from 'react-redux';
 
 const AddMoney = () => {
 
@@ -12,7 +11,6 @@ const AddMoney = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("amount to be sent-", amount);
       const res = await addMoney(JSON.stringify({ amount }));
       if (res.data) {
         console.log("amount added-", res.data);
@@ -31,7 +29,7 @@ const AddMoney = () => {
       <form onSubmit={handleSubmit} className='space-y-6'>
         <div>
           <label htmlFor="amount" className="block text-sm font-medium text-gray-700">Enter Amount</label>
-          <input type="number" name='amount' placeholder='Enter amount' value={amount} onChange={(e) => setAmount(e.target.value)} required
+          <input type="number" name='amount' placeholder='Enter amount' value={amount} min={1} onChange={(e) => setAmount(e.target.value)} required
             className="w-64 mt-1 text-black px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
         </div>
         <div>

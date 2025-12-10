@@ -101,7 +101,7 @@ const Transactions = () => {
 
       {/* Change it later as i want to implement infinite scroll for getting more transactions in multiple of 10 */}
 
-      <div className='bg-white mt-4 w-full py-8 md:px-8 px-6 shadow rounded-lg'>
+      <div className='bg-white mt-4 w-full py-8 md:px-8 px-6'>
         <h1 className='font-bold'>Your transactions</h1>
         {!filteredTransactionData && <p>Loading...</p>}
         {filteredTransactionData?.map((transaction) => (
