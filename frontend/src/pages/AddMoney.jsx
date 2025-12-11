@@ -17,7 +17,7 @@ const AddMoney = () => {
         setAmount("")
         // update balance based on res.data.balance
         // dispatch()
-
+        window.location.href = res.data.url;
       }
     } catch (error) {
       console.log(error);
