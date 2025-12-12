@@ -11,11 +11,17 @@ import healthRoutes from "./routes/healthRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import { handleStripeWebhook } from "./controllers/transactionController.js";
 import Stripe from "stripe";
+import { apiLimiter } from "./middlewares/rateLimiter.js";
 
 const app = express();
 const PORT = process.env.PORT || 8000;
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+app.set("trust proxy", 1);
+
+// Global IP based rate limiter
+app.use(apiLimiter);
 
 app.post(
   "/webhook",
