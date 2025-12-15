@@ -1,13 +1,13 @@
 # 💰 PayYou – Digital Wallet Web App
 
-PayYou is a full-stack digital wallet application that allows users to securely manage their money online. From adding money to sending funds, users can track their transactions, visualize their spending, and stay in control of their finances — all in one place.
+PayYou is a full-stack secure digital wallet application that allows users to securely manage their money online. From adding money from cards to sending funds, users can track their transactions, visualize their transactions history through graphical charts, and stay in control of their finances — all at one place.
 
 ---
 
 ## 🚀 Features
 
 - 🔐 **User Authentication**: Secure login/signup with email & password (with JWT).
-- 💸 **Wallet Management**: Add money to your wallet and view updated balance.
+- 💸 **Wallet Management**: Add money to your wallet through stripe payment gateway and view updated balance.
 - 🔁 **Send Money**: Transfer funds instantly to other registered users.
 - 📊 **Transaction History**: Track your past transactions with timestamps and amounts.
 - 📈 **Spending Analytics**: Visual graphs to monitor weekly spending.
@@ -38,10 +38,17 @@ PayYou is a full-stack digital wallet application that allows users to securely 
 ---
 ## Screenshots
 <img width="1565" height="1027" alt="payyou" src="https://github.com/user-attachments/assets/fe61f263-e22d-4f36-b236-78b5823e2934" />
+
 <img width="1377" height="1079" alt="Screenshot 2025-07-19 215545" src="https://github.com/user-attachments/assets/6e38d7a0-5f39-46a9-a009-5852274ebaa9" />
+
 <img width="1291" height="1077" alt="Screenshot 2025-07-19 215630" src="https://github.com/user-attachments/assets/cf899fbb-1c82-46e4-bdb2-6d93757fe235" />
+
 <img width="1890" height="904" alt="Screenshot 2025-07-19 215325" src="https://github.com/user-attachments/assets/6fbe7262-0cf5-4334-8ae5-b0740866d6e5" />
+
 <img width="1663" height="1074" alt="Screenshot 2025-07-19 214859" src="https://github.com/user-attachments/assets/c905f204-4f4e-40c6-b446-bdfddfaf5f51" />
+
+<img width="1617" height="870" alt="image" src="https://github.com/user-attachments/assets/6f94e96f-baf4-4ddf-8a5a-ed505b688b95" />
+
 <img width="1886" height="875" alt="Screenshot 2025-07-19 215102" src="https://github.com/user-attachments/assets/c4f9fe17-27c3-4cf8-b0ea-2601e3060c24" />
 
 
