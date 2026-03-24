@@ -3,6 +3,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import authRoutes from "./modules/auth/auth.routes";
+import walletRoutes from "./modules/wallet/wallet.routes";
+import transactionRoutes from "./modules/transaction/transaction.routes";
 
 dotenv.config();
 
@@ -20,8 +22,8 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
 // app.use("/api/users", userRoutes);
-// app.use("/api/wallet", walletRoutes);
-// app.use("/api/transactions", transactionRoutes);
+app.use("/api/wallet", walletRoutes);
+app.use("/api/transactions", transactionRoutes);
 
 app.use("/health", (_, res) => res.json({ status: "ok" }));
 
