@@ -27,6 +27,21 @@ export const verifyOtpSchema = z.object({
     .regex(/^\d+$/, "OTP must be numeric"),
 });
 
+export const sendMoneySchema = z.object({
+  recipientUsername: z
+    .string()
+    .min(3, "At least 3 characters")
+    .regex(/^[a-z0-9_]+$/, "Lowercase letters, numbers, underscores only"),
+
+  amount: z
+    .number("Enter a valid amount")
+    .positive("Amount must be greater than 0")
+    .max(100000, "Exceeds maximum transfer limit"),
+
+  note: z.string().max(100, "Note too long").optional(),
+});
+
 export type SignupFormData = z.infer<typeof signupSchema>;
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type VerifyOtpFormData = z.infer<typeof verifyOtpSchema>;
+export type SendMoneyFormData = z.infer<typeof sendMoneySchema>;
