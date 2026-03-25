@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import authRoutes from "./modules/auth/auth.routes";
+import paymentRoutes from "./modules/payment/payment.routes";
 import walletRoutes from "./modules/wallet/wallet.routes";
 import transactionRoutes from "./modules/transaction/transaction.routes";
 
@@ -17,8 +18,11 @@ app.use(
   }),
 );
 
-app.use(express.json());
 app.use(cookieParser());
+
+app.use("/api/payment", paymentRoutes);
+
+app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 // app.use("/api/users", userRoutes);
