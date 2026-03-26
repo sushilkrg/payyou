@@ -5,24 +5,26 @@ import { TransactionType, TransactionStatus, EntryType } from "@prisma/client";
 import { CreatePaymentIntentInput } from "./payment.schema";
 
 // ─── CREATE PAYMENT INTENT ────────────────────────────────
-//
-// A PaymentIntent represents one payment attempt in Stripe.
-// We create it on our backend (never frontend) so we control the amount.
-// The clientSecret returned is safe to send to frontend —
-// it only allows confirming THIS specific payment, nothing else.
 
 export const createPaymentIntentService = async (
   userId: string,
   data: CreatePaymentIntentInput,
 ) => {
+  if (!data || data.amount === undefined) throw new Error("INVALID_INPUT");
+
   const { amount } = data;
 
   const wallet = await prisma.wallet.findUnique({ where: { userId } });
   if (!wallet) throw new Error("WALLET_NOT_FOUND");
   if (wallet.status === "FROZEN") throw new Error("WALLET_FROZEN");
 
-  // Idempotency key — prevents duplicate PaymentIntents if user
-  // clicks "Add Money" multiple times in the same minute
+  // Fetch user details — needed for Indian export compliance
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { fullName: true, email: true },
+  });
+  if (!user) throw new Error("USER_NOT_FOUND");
+
   const minute = Math.floor(Date.now() / 60000);
   const idempotencyKey = `payment:${userId}:${amount}:${minute}`;
 
@@ -37,13 +39,27 @@ export const createPaymentIntentService = async (
     };
   }
 
-  // Stripe amounts are in smallest currency unit
-  // INR: ₹100 = 10000 paise (multiply by 100)
   const amountInPaise = Math.round(amount * 100);
 
   const paymentIntent = await stripe.paymentIntents.create({
     amount: amountInPaise,
     currency: "inr",
+    description: "Wallet top-up via PayYou",
+    statement_descriptor: "PAYYOU WALLET",
+
+    // Required by Stripe for Indian merchant accounts (RBI export regulations)
+    // Customer name and address must be provided on every INR PaymentIntent
+    shipping: {
+      name: user.fullName,
+      address: {
+        line1: "India",
+        city: "India",
+        state: "India",
+        postal_code: "000000",
+        country: "IN",
+      },
+    },
+
     metadata: {
       userId,
       walletId: wallet.id,
@@ -52,7 +68,6 @@ export const createPaymentIntentService = async (
     automatic_payment_methods: { enabled: true },
   });
 
-  // Cache PaymentIntent ID for idempotency (TTL: 2 minutes)
   await redis.set(idempotencyKey, paymentIntent.id, { ex: 120 });
 
   return {
@@ -136,7 +151,7 @@ export const handleWebhookService = async (
   return { received: true };
 };
 
-// ─── GET PAYMENT STATUS ───────────────────────────────────
+//  GET PAYMENT STATUS
 
 export const getPaymentStatusService = async (
   paymentIntentId: string,

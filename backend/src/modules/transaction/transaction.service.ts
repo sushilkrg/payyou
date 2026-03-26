@@ -155,7 +155,9 @@ export const getTransactionsService = async (
   const wallet = await prisma.wallet.findUnique({ where: { userId } });
   if (!wallet) throw new Error("WALLET_NOT_FOUND");
 
-  const skip = (page - 1) * limit;
+  const pageNum = Number(page) || 1;
+const limitNum = Number(limit) || 10;
+  const skip = (pageNum - 1) * limit;
 
   // Build dynamic where clause based on query params
   // We fetch transactions where this wallet is either sender OR receiver
@@ -172,8 +174,8 @@ export const getTransactionsService = async (
     prisma.transaction.findMany({
       where,
       orderBy: { createdAt: "desc" },
-      skip,
-      take: limit,
+      skip: skip,
+      take: limitNum,
       include: {
         // Include wallet owner details for display
         senderWallet: {

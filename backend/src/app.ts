@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import authRoutes from "./modules/auth/auth.routes";
 import paymentRoutes from "./modules/payment/payment.routes";
+import webhookRoutes from "./modules/payment/webhook.routes";
 import walletRoutes from "./modules/wallet/wallet.routes";
 import transactionRoutes from "./modules/transaction/transaction.routes";
 
@@ -20,13 +21,13 @@ app.use(
 
 app.use(cookieParser());
 
-app.use("/api/payment", paymentRoutes);
-
+app.use("/api/webhook", webhookRoutes);
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 // app.use("/api/users", userRoutes);
 app.use("/api/wallet", walletRoutes);
+app.use("/api/payment", paymentRoutes);
 app.use("/api/transactions", transactionRoutes);
 
 app.use("/health", (_, res) => res.json({ status: "ok" }));

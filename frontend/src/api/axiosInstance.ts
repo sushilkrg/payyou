@@ -5,10 +5,13 @@ import { clearUser } from "../store/slices/userSlice";
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  withCredentials: true, 
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
-// Request Interceptor 
+// Request Interceptor
 // Attach accessToken (from Redux) to every request's Authorization header
 
 instance.interceptors.request.use((config) => {

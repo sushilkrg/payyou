@@ -9,6 +9,7 @@ import { AuthRequest } from "../../middlewares/auth.middleware";
 const handleError = (res: Response, err: unknown): void => {
   const message = err instanceof Error ? err.message : "INTERNAL_ERROR";
   const errorMap: Record<string, { status: number; message: string }> = {
+    INVALID_INPUT: { status: 400, message: "Invalid request data" },
     WALLET_NOT_FOUND: { status: 404, message: "Wallet not found" },
     WALLET_FROZEN: { status: 403, message: "Your wallet is frozen" },
     INVALID_WEBHOOK_SIGNATURE: {
