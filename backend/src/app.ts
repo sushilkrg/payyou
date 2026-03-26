@@ -4,9 +4,9 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import authRoutes from "./modules/auth/auth.routes";
 import paymentRoutes from "./modules/payment/payment.routes";
-import webhookRoutes from "./modules/payment/webhook.routes";
 import walletRoutes from "./modules/wallet/wallet.routes";
 import transactionRoutes from "./modules/transaction/transaction.routes";
+import { stripeWebhook } from "./modules/payment/payment.controller";
 
 dotenv.config();
 
@@ -21,7 +21,11 @@ app.use(
 
 app.use(cookieParser());
 
-app.use("/api/webhook", webhookRoutes);
+app.post(
+  "/api/webhook/stripe",
+  express.raw({ type: "application/json" }),
+  stripeWebhook
+);
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
