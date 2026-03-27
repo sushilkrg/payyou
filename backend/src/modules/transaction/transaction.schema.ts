@@ -19,8 +19,17 @@ export const sendMoneySchema = z.object({
 export const transactionQuerySchema = z.object({
   type: z.enum(["SEND", "RECEIVE", "ADD"]).optional(),
   status: z.enum(["PENDING", "SUCCESS", "FAILED"]).optional(),
-  page: z.string().regex(/^\d+$/).optional().transform(Number),
-  limit: z.string().regex(/^\d+$/).optional().transform(Number),
+  page: z
+    .string()
+    .optional()
+    .transform((val) => (val ? parseInt(val, 10) : 1)) //  default 1
+    .pipe(z.number().min(1)),
+
+  limit: z
+    .string()
+    .optional()
+    .transform((val) => (val ? parseInt(val, 10) : 10)) //  default 10
+    .pipe(z.number().min(1).max(50)),
 });
 
 export type SendMoneyInput = z.infer<typeof sendMoneySchema>;

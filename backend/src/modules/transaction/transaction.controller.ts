@@ -74,9 +74,21 @@ export const getTransactions = async (
   res: Response,
 ): Promise<void> => {
   try {
-    // Validate and parse query params with Zod
-    const query = transactionQuerySchema.parse(req.query);
-    const result = await getTransactionsService(req.userId!, query);
+    const parsed = transactionQuerySchema.safeParse(req.query);
+
+    if (!parsed.success) {
+      res.status(400).json({
+        success: false,
+        message: "Invalid query parameters",
+        errors: parsed.error.issues.map((e) => ({
+          field: e.path.join("."),
+          message: e.message,
+        })),
+      });
+      return;
+    }
+
+    const result = await getTransactionsService(req.userId!, parsed.data);
     res.status(200).json({ success: true, ...result });
   } catch (err) {
     handleError(res, err);
