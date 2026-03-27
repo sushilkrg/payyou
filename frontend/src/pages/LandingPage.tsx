@@ -1,838 +1,847 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
+
+// ─── Data ─────────────────────────────────────────────────
 
 const features = [
   {
-    icon: "↑",
-    title: "Send Instantly",
-    desc: "Transfer money to anyone by username in seconds. No bank details needed.",
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        className="w-5 h-5"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+        />
+      </svg>
+    ),
+    title: "Instant Transfers",
+    desc: "Send money to any PayYou user by username in under 3 seconds. No account numbers, no IFSC codes.",
   },
   {
-    icon: "+",
-    title: "Add Money",
-    desc: "Top up your wallet securely via card. Powered by Stripe.",
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        className="w-5 h-5"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+        />
+      </svg>
+    ),
+    title: "Card Top-ups",
+    desc: "Add funds securely using any debit or credit card. Powered by Stripe with full PCI compliance.",
   },
   {
-    icon: "≡",
-    title: "Full History",
-    desc: "Every transaction logged. Filter by type, status, and date.",
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        className="w-5 h-5"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+        />
+      </svg>
+    ),
+    title: "Smart History",
+    desc: "Every rupee tracked. Filter transactions by type, date, and status with a clean audit trail.",
   },
   {
-    icon: "🤖",
-    title: "AI Assistant",
-    desc: "Gemini-powered chatbot to guide you through every feature.",
-  },
-  {
-    icon: "🔒",
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        className="w-5 h-5"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+        />
+      </svg>
+    ),
     title: "Bank-grade Security",
-    desc: "JWT auth, httpOnly cookies, bcrypt passwords, Stripe PCI compliance.",
+    desc: "httpOnly cookies, bcrypt hashing, JWT with refresh rotation, and Stripe-level card security.",
   },
   {
-    icon: "⚡",
-    title: "Daily Limits",
-    desc: "Set your own daily transfer cap. Stay in control of your spending.",
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        className="w-5 h-5"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+        />
+      </svg>
+    ),
+    title: "Daily Spend Limits",
+    desc: "Set your own daily transfer cap from ₹100 to ₹1,00,000. Full control over your spending.",
+  },
+  {
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        className="w-5 h-5"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+        />
+      </svg>
+    ),
+    title: "AI Assistant",
+    desc: "Gemini-powered chatbot guides you through every feature — available on every page, always.",
   },
 ];
 
 const steps = [
-  { num: "01", title: "Create Account", desc: "Sign up with your email and verify via OTP." },
-  { num: "02", title: "Add Money",      desc: "Top up your wallet securely using your card." },
-  { num: "03", title: "Send & Receive", desc: "Transfer funds to anyone on PayYou by username." },
+  {
+    num: "01",
+    title: "Create Your Account",
+    desc: "Sign up with your email and verify your identity with a secure OTP. Takes under a minute.",
+  },
+  {
+    num: "02",
+    title: "Fund Your Wallet",
+    desc: "Add money using any debit or credit card. Stripe handles the payment — we just credit your balance.",
+  },
+  {
+    num: "03",
+    title: "Send & Receive",
+    desc: "Transfer money to any user by their PayYou username. Instant, feeless, and fully recorded.",
+  },
 ];
 
-const LandingPage = () => {
-  const observerRef = useRef<IntersectionObserver | null>(null);
+const stats = [
+  { val: "₹0", label: "Setup fee" },
+  { val: "< 3s", label: "Transfer time" },
+  { val: "256", label: "Bit encryption" },
+  { val: "24/7", label: "AI support" },
+];
 
+
+const LandingPage = () => {
   useEffect(() => {
-    observerRef.current = new IntersectionObserver(
+    // Google Fonts
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href =
+      "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap";
+    document.head.appendChild(link);
+
+    // Scroll reveal
+    const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("revealed");
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            (e.target as HTMLElement).style.opacity = "1";
+            (e.target as HTMLElement).style.transform = "translateY(0)";
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.08 },
     );
 
-    document.querySelectorAll(".reveal").forEach((el) => {
-      observerRef.current?.observe(el);
-    });
-
-    return () => observerRef.current?.disconnect();
+    document
+      .querySelectorAll("[data-reveal]")
+      .forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <div className="landing">
-      {/* ── Navbar ── */}
-      <nav className="nav">
-        <div className="nav-inner">
-          <span className="logo">PayYou</span>
-          <div className="nav-links">
-            <Link to="/login"  className="btn-ghost">Sign in</Link>
-            <Link to="/signup" className="btn-primary">Get Started</Link>
-          </div>
-        </div>
-      </nav>
-
-      {/* ── Hero ── */}
-      <section className="hero">
-        <div className="hero-bg">
-          <div className="orb orb-1" />
-          <div className="orb orb-2" />
-          <div className="orb orb-3" />
-          <div className="grid-overlay" />
-        </div>
-
-        <div className="hero-content">
-          <div className="badge reveal">
-            <span className="badge-dot" />
-            Secure · Fast · Simple
-          </div>
-
-          <h1 className="hero-title reveal">
-            Your Money,<br />
-            <span className="gradient-text">Your Way.</span>
-          </h1>
-
-          <p className="hero-sub reveal">
-            A digital wallet built for speed. Send money, add funds,
-            and manage transactions — all in one clean dashboard.
-          </p>
-
-          <div className="hero-ctas reveal">
-            <Link to="/signup" className="btn-primary btn-lg">
-              Create Free Account
-            </Link>
-            <Link to="/login" className="btn-outline btn-lg">
-              Sign In
-            </Link>
-          </div>
-
-          <div className="hero-stats reveal">
-            {[
-              { val: "₹0",    label: "Setup fee"         },
-              { val: "15s",   label: "To send money"     },
-              { val: "100%",  label: "Secure payments"   },
-            ].map((s) => (
-              <div key={s.label} className="stat">
-                <span className="stat-val">{s.val}</span>
-                <span className="stat-label">{s.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Floating wallet card */}
-        <div className="hero-visual reveal">
-          <div className="wallet-card">
-            <div className="card-header">
-              <span className="card-logo">PayYou</span>
-              <span className="card-chip">◈</span>
-            </div>
-            <div className="card-balance-label">Total Balance</div>
-            <div className="card-balance">₹24,850.00</div>
-            <div className="card-footer">
-              <div>
-                <div className="card-meta-label">Daily Limit</div>
-                <div className="card-meta-val">₹10,000</div>
-              </div>
-              <div className="card-limit-bar">
-                <div className="card-limit-fill" style={{ width: "42%" }} />
-              </div>
-            </div>
-          </div>
-
-          {/* Floating transaction pills */}
-          <div className="tx-pill tx-pill-1">
-            <span className="tx-icon tx-out">↑</span>
-            <div>
-              <div className="tx-name">To @rahul</div>
-              <div className="tx-time">Just now</div>
-            </div>
-            <span className="tx-amt tx-amt-out">−₹500</span>
-          </div>
-
-          <div className="tx-pill tx-pill-2">
-            <span className="tx-icon tx-in">↓</span>
-            <div>
-              <div className="tx-name">From @priya</div>
-              <div className="tx-time">2 min ago</div>
-            </div>
-            <span className="tx-amt tx-amt-in">+₹1,200</span>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Features ── */}
-      <section className="features-section">
-        <div className="section-inner">
-          <div className="section-label reveal">Features</div>
-          <h2 className="section-title reveal">
-            Everything you need,<br className="hide-mobile" /> nothing you don't.
-          </h2>
-
-          <div className="features-grid">
-            {features.map((f, i) => (
-              <div
-                key={f.title}
-                className="feature-card reveal"
-                style={{ animationDelay: `${i * 80}ms` }}
-              >
-                <div className="feature-icon">{f.icon}</div>
-                <h3 className="feature-title">{f.title}</h3>
-                <p className="feature-desc">{f.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── How it works ── */}
-      <section className="how-section">
-        <div className="section-inner">
-          <div className="section-label reveal">How it works</div>
-          <h2 className="section-title reveal">Up and running in minutes.</h2>
-
-          <div className="steps">
-            {steps.map((s, i) => (
-              <div key={s.num} className="step reveal" style={{ animationDelay: `${i * 100}ms` }}>
-                <div className="step-num">{s.num}</div>
-                <div className="step-line" />
-                <h3 className="step-title">{s.title}</h3>
-                <p className="step-desc">{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA Banner ── */}
-      <section className="cta-section">
-        <div className="cta-inner reveal">
-          <div className="cta-orb" />
-          <h2 className="cta-title">Ready to get started?</h2>
-          <p className="cta-sub">
-            Join thousands of users who trust PayYou for fast, secure transfers.
-          </p>
-          <Link to="/signup" className="btn-primary btn-lg btn-white">
-            Create Your Free Wallet →
-          </Link>
-        </div>
-      </section>
-
-      {/* ── Footer ── */}
-      <footer className="footer">
-        <div className="footer-inner">
-          <span className="logo">PayYou</span>
-          <p className="footer-copy">© {new Date().getFullYear()} PayYou. All rights reserved.</p>
-          <div className="footer-links">
-            <Link to="/login">Login</Link>
-            <Link to="/signup">Sign Up</Link>
-          </div>
-        </div>
-      </footer>
-
-      {/* ── Styles ── */}
+    <div
+      className="min-h-screen bg-[#080810] text-zinc-300 overflow-x-hidden"
+      style={{ fontFamily: "'Instrument Sans', sans-serif" }}
+    >
+      {/* ── Google Font preload style ── */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
-
-        /* ── Reset & Base ── */
-        .landing * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        .landing {
-          font-family: 'DM Sans', sans-serif;
-          background: #09090b;
-          color: #e4e4e7;
-          overflow-x: hidden;
-          -webkit-font-smoothing: antialiased;
-        }
-
-        /* ── Scroll reveal ── */
-        .reveal {
+        .font-display { font-family: 'Bricolage Grotesque', sans-serif; }
+        [data-reveal] {
           opacity: 0;
-          transform: translateY(24px);
-          transition: opacity 0.6s ease, transform 0.6s ease;
+          transform: translateY(28px);
+          transition: opacity 0.65s cubic-bezier(.16,1,.3,1), transform 0.65s cubic-bezier(.16,1,.3,1);
         }
-        .reveal.revealed {
-          opacity: 1;
-          transform: translateY(0);
-        }
-
-        /* ── Navbar ── */
-        .nav {
-          position: fixed;
-          top: 0; left: 0; right: 0;
-          z-index: 100;
-          border-bottom: 1px solid rgba(255,255,255,0.06);
-          background: rgba(9,9,11,0.8);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-        }
-        .nav-inner {
-          max-width: 1120px;
-          margin: 0 auto;
-          padding: 0 20px;
-          height: 60px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-        .logo {
-          font-family: 'Syne', sans-serif;
-          font-weight: 800;
-          font-size: 1.25rem;
-          color: #fff;
-          letter-spacing: -0.02em;
-        }
-        .nav-links { display: flex; align-items: center; gap: 10px; }
-
-        /* ── Buttons ── */
-        .btn-primary {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          background: #6366f1;
-          color: #fff;
-          font-family: 'DM Sans', sans-serif;
-          font-weight: 500;
-          font-size: 0.875rem;
-          padding: 8px 18px;
-          border-radius: 8px;
-          text-decoration: none;
-          border: none;
-          cursor: pointer;
-          transition: background 0.2s, transform 0.15s;
-          white-space: nowrap;
-        }
-        .btn-primary:hover { background: #4f46e5; transform: translateY(-1px); }
-        .btn-primary.btn-lg { font-size: 1rem; padding: 12px 28px; border-radius: 10px; }
-        .btn-primary.btn-white { background: #fff; color: #18181b; }
-        .btn-primary.btn-white:hover { background: #f4f4f5; }
-
-        .btn-ghost {
-          display: inline-flex;
-          align-items: center;
-          color: #a1a1aa;
-          font-family: 'DM Sans', sans-serif;
-          font-weight: 500;
-          font-size: 0.875rem;
-          padding: 8px 14px;
-          border-radius: 8px;
-          text-decoration: none;
-          transition: color 0.2s, background 0.2s;
-        }
-        .btn-ghost:hover { color: #fff; background: rgba(255,255,255,0.06); }
-
-        .btn-outline {
-          display: inline-flex;
-          align-items: center;
-          color: #e4e4e7;
-          font-family: 'DM Sans', sans-serif;
-          font-weight: 500;
-          font-size: 1rem;
-          padding: 12px 28px;
-          border-radius: 10px;
-          text-decoration: none;
-          border: 1px solid rgba(255,255,255,0.15);
-          transition: border-color 0.2s, background 0.2s;
-        }
-        .btn-outline:hover { border-color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.04); }
-
-        /* ── Hero ── */
-        .hero {
-          min-height: 100vh;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          padding: 100px 20px 60px;
+        .card-shine {
           position: relative;
-          gap: 60px;
+          overflow: hidden;
         }
-        @media (min-width: 1024px) {
-          .hero {
-            flex-direction: row;
-            padding: 120px 60px 80px;
-            max-width: 1200px;
-            margin: 0 auto;
-            gap: 80px;
-          }
-        }
-
-        .hero-bg {
+        .card-shine::before {
+          content: '';
           position: absolute;
           inset: 0;
-          overflow: hidden;
+          background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%);
           pointer-events: none;
         }
-        .orb {
-          position: absolute;
-          border-radius: 50%;
-          filter: blur(80px);
-          opacity: 0.15;
+        @keyframes float-up {
+          0%, 100% { transform: translateY(0px); }
+          50%       { transform: translateY(-10px); }
         }
-        .orb-1 {
-          width: 500px; height: 500px;
-          background: #6366f1;
-          top: -100px; left: -100px;
+        @keyframes float-down {
+          0%, 100% { transform: translateY(0px); }
+          50%       { transform: translateY(10px); }
         }
-        .orb-2 {
-          width: 400px; height: 400px;
-          background: #8b5cf6;
-          top: 50%; right: -80px;
-          transform: translateY(-50%);
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
         }
-        .orb-3 {
-          width: 300px; height: 300px;
-          background: #06b6d4;
-          bottom: -50px; left: 40%;
+        @keyframes pulse-ring {
+          0%    { transform: scale(1);   opacity: 0.4; }
+          100%  { transform: scale(1.6); opacity: 0; }
         }
-        .grid-overlay {
-          position: absolute;
-          inset: 0;
-          background-image:
-            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-          background-size: 60px 60px;
-        }
-
-        .hero-content {
-          position: relative;
-          z-index: 1;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          gap: 24px;
-          text-align: center;
-        }
-        @media (min-width: 1024px) {
-          .hero-content { text-align: left; max-width: 560px; }
-        }
-
-        .badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          background: rgba(99,102,241,0.12);
-          border: 1px solid rgba(99,102,241,0.25);
-          color: #a5b4fc;
-          font-size: 0.8rem;
-          font-weight: 500;
-          padding: 5px 14px;
-          border-radius: 99px;
-          width: fit-content;
-          margin: 0 auto;
-          letter-spacing: 0.03em;
-        }
-        @media (min-width: 1024px) { .badge { margin: 0; } }
-
-        .badge-dot {
-          width: 6px; height: 6px;
-          background: #6366f1;
-          border-radius: 50%;
-          animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50%       { opacity: 0.5; transform: scale(0.8); }
-        }
-
-        .hero-title {
-          font-family: 'Syne', sans-serif;
-          font-weight: 800;
-          font-size: clamp(2.6rem, 7vw, 4.5rem);
-          line-height: 1.05;
-          letter-spacing: -0.03em;
-          color: #fff;
-        }
+        .float-up   { animation: float-up   5s ease-in-out infinite; }
+        .float-down { animation: float-down 5s ease-in-out infinite 2.5s; }
+        .spin-slow  { animation: spin-slow  20s linear infinite; }
+        .pulse-ring { animation: pulse-ring 2s ease-out infinite; }
         .gradient-text {
-          background: linear-gradient(135deg, #6366f1, #8b5cf6, #06b6d4);
+          background: linear-gradient(135deg, #fff 30%, #818cf8 70%, #38bdf8 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
         }
-
-        .hero-sub {
-          font-size: 1.05rem;
-          line-height: 1.7;
-          color: #71717a;
-          max-width: 480px;
-          margin: 0 auto;
-        }
-        @media (min-width: 1024px) { .hero-sub { margin: 0; } }
-
-        .hero-ctas {
-          display: flex;
-          gap: 12px;
-          flex-wrap: wrap;
-          justify-content: center;
-        }
-        @media (min-width: 1024px) { .hero-ctas { justify-content: flex-start; } }
-
-        .hero-stats {
-          display: flex;
-          gap: 32px;
-          justify-content: center;
-          padding-top: 8px;
-        }
-        @media (min-width: 1024px) { .hero-stats { justify-content: flex-start; } }
-
-        .stat { display: flex; flex-direction: column; gap: 2px; }
-        .stat-val {
-          font-family: 'Syne', sans-serif;
-          font-weight: 700;
-          font-size: 1.4rem;
-          color: #fff;
-          letter-spacing: -0.02em;
-        }
-        .stat-label { font-size: 0.75rem; color: #52525b; }
-
-        /* ── Hero Visual ── */
-        .hero-visual {
-          position: relative;
-          z-index: 1;
-          flex-shrink: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 100%;
-        }
-        @media (min-width: 1024px) { .hero-visual { width: auto; } }
-
-        .wallet-card {
-          background: linear-gradient(135deg, #1e1b4b, #312e81, #1e1b4b);
-          border: 1px solid rgba(99,102,241,0.3);
-          border-radius: 20px;
-          padding: 28px;
-          width: 280px;
-          box-shadow:
-            0 0 0 1px rgba(99,102,241,0.1),
-            0 20px 60px rgba(99,102,241,0.2),
-            0 4px 20px rgba(0,0,0,0.5);
-          position: relative;
-        }
-        @media (min-width: 480px) { .wallet-card { width: 300px; } }
-
-        .card-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 28px;
-        }
-        .card-logo {
-          font-family: 'Syne', sans-serif;
-          font-weight: 800;
-          font-size: 1rem;
-          color: rgba(255,255,255,0.9);
-        }
-        .card-chip {
-          font-size: 1.2rem;
-          color: rgba(255,255,255,0.4);
-        }
-        .card-balance-label {
-          font-size: 0.72rem;
-          color: rgba(255,255,255,0.45);
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          margin-bottom: 6px;
-        }
-        .card-balance {
-          font-family: 'Syne', sans-serif;
-          font-weight: 700;
-          font-size: 1.9rem;
-          color: #fff;
-          letter-spacing: -0.02em;
-          margin-bottom: 24px;
-        }
-        .card-footer {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 16px;
-        }
-        .card-meta-label {
-          font-size: 0.68rem;
-          color: rgba(255,255,255,0.35);
-          text-transform: uppercase;
-          letter-spacing: 0.08em;
-          margin-bottom: 3px;
-        }
-        .card-meta-val {
-          font-size: 0.85rem;
-          color: rgba(255,255,255,0.7);
-          font-weight: 500;
-        }
-        .card-limit-bar {
-          flex: 1;
-          height: 4px;
-          background: rgba(255,255,255,0.1);
-          border-radius: 99px;
-          overflow: hidden;
-        }
-        .card-limit-fill {
-          height: 100%;
-          background: linear-gradient(90deg, #6366f1, #8b5cf6);
-          border-radius: 99px;
-        }
-
-        /* Transaction pills */
-        .tx-pill {
-          position: absolute;
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          background: rgba(24,24,27,0.95);
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 12px;
-          padding: 10px 14px;
-          backdrop-filter: blur(12px);
-          box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-          white-space: nowrap;
-        }
-        .tx-pill-1 {
-          bottom: -20px;
-          left: -40px;
-          animation: floatA 4s ease-in-out infinite;
-        }
-        .tx-pill-2 {
-          top: -20px;
-          right: -40px;
-          animation: floatB 4s ease-in-out infinite 2s;
-        }
-        @media (max-width: 480px) {
-          .tx-pill-1 { left: -10px; }
-          .tx-pill-2 { right: -10px; }
-        }
-        @keyframes floatA {
-          0%, 100% { transform: translateY(0); }
-          50%       { transform: translateY(-8px); }
-        }
-        @keyframes floatB {
-          0%, 100% { transform: translateY(0); }
-          50%       { transform: translateY(8px); }
-        }
-
-        .tx-icon {
-          width: 30px; height: 30px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 0.8rem;
-          font-weight: 600;
-          flex-shrink: 0;
-        }
-        .tx-in  { background: rgba(34,197,94,0.15);  color: #22c55e; }
-        .tx-out { background: rgba(239,68,68,0.15);   color: #ef4444; }
-        .tx-name { font-size: 0.78rem; font-weight: 500; color: #e4e4e7; }
-        .tx-time { font-size: 0.68rem; color: #52525b; }
-        .tx-amt  { font-size: 0.82rem; font-weight: 600; margin-left: 4px; }
-        .tx-amt-in  { color: #22c55e; }
-        .tx-amt-out { color: #ef4444; }
-
-        /* ── Section shared ── */
-        .section-inner {
-          max-width: 1120px;
-          margin: 0 auto;
-          padding: 0 20px;
-        }
-        .section-label {
-          display: inline-block;
-          font-size: 0.75rem;
-          font-weight: 600;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          color: #6366f1;
-          margin-bottom: 14px;
-        }
-        .section-title {
-          font-family: 'Syne', sans-serif;
-          font-weight: 800;
-          font-size: clamp(1.8rem, 4vw, 2.8rem);
-          letter-spacing: -0.03em;
-          color: #fff;
-          line-height: 1.15;
-          margin-bottom: 48px;
-        }
-        .hide-mobile { display: none; }
-        @media (min-width: 768px) { .hide-mobile { display: block; } }
-
-        /* ── Features ── */
-        .features-section {
-          padding: 80px 0;
-          border-top: 1px solid rgba(255,255,255,0.05);
-        }
-        .features-grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 16px;
-        }
-        @media (min-width: 640px) {
-          .features-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (min-width: 1024px) {
-          .features-grid { grid-template-columns: repeat(3, 1fr); }
-        }
-
-        .feature-card {
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.07);
-          border-radius: 16px;
-          padding: 28px;
-          transition: border-color 0.2s, background 0.2s, transform 0.2s;
-        }
-        .feature-card:hover {
-          border-color: rgba(99,102,241,0.3);
-          background: rgba(99,102,241,0.05);
-          transform: translateY(-2px);
-        }
-        .feature-icon {
-          font-size: 1.4rem;
-          margin-bottom: 14px;
-          display: block;
-          width: 44px; height: 44px;
-          background: rgba(99,102,241,0.12);
-          border-radius: 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .feature-title {
-          font-family: 'Syne', sans-serif;
-          font-weight: 700;
-          font-size: 1rem;
-          color: #fff;
-          margin-bottom: 8px;
-          letter-spacing: -0.01em;
-        }
-        .feature-desc {
-          font-size: 0.875rem;
-          line-height: 1.65;
-          color: #71717a;
-        }
-
-        /* ── How it works ── */
-        .how-section {
-          padding: 80px 0;
-          border-top: 1px solid rgba(255,255,255,0.05);
-        }
-        .steps {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 24px;
-        }
-        @media (min-width: 768px) {
-          .steps { grid-template-columns: repeat(3, 1fr); gap: 32px; }
-        }
-
-        .step {
-          position: relative;
-          padding: 28px;
-          background: rgba(255,255,255,0.02);
-          border: 1px solid rgba(255,255,255,0.06);
-          border-radius: 16px;
-        }
-        .step-num {
-          font-family: 'Syne', sans-serif;
-          font-weight: 800;
-          font-size: 2.5rem;
-          color: rgba(99,102,241,0.2);
-          letter-spacing: -0.04em;
-          line-height: 1;
-          margin-bottom: 16px;
-        }
-        .step-line {
-          width: 32px; height: 2px;
-          background: #6366f1;
-          border-radius: 2px;
-          margin-bottom: 16px;
-        }
-        .step-title {
-          font-family: 'Syne', sans-serif;
-          font-weight: 700;
-          font-size: 1.05rem;
-          color: #fff;
-          margin-bottom: 8px;
-          letter-spacing: -0.01em;
-        }
-        .step-desc {
-          font-size: 0.875rem;
-          line-height: 1.65;
-          color: #71717a;
-        }
-
-        /* ── CTA ── */
-        .cta-section {
-          padding: 80px 20px;
-          border-top: 1px solid rgba(255,255,255,0.05);
-        }
-        .cta-inner {
-          max-width: 640px;
-          margin: 0 auto;
-          text-align: center;
-          position: relative;
-        }
-        .cta-orb {
-          position: absolute;
-          width: 400px; height: 400px;
-          background: radial-gradient(circle, rgba(99,102,241,0.15), transparent 70%);
-          border-radius: 50%;
-          top: 50%; left: 50%;
-          transform: translate(-50%, -50%);
+        .noise-bg::after {
+          content: '';
+          position: fixed;
+          inset: 0;
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
           pointer-events: none;
+          z-index: 0;
         }
-        .cta-title {
-          font-family: 'Syne', sans-serif;
-          font-weight: 800;
-          font-size: clamp(2rem, 5vw, 3rem);
-          color: #fff;
-          letter-spacing: -0.03em;
-          margin-bottom: 16px;
-          position: relative;
-        }
-        .cta-sub {
-          font-size: 1rem;
-          color: #71717a;
-          line-height: 1.7;
-          margin-bottom: 32px;
-          position: relative;
-        }
-
-        /* ── Footer ── */
-        .footer {
-          border-top: 1px solid rgba(255,255,255,0.06);
-          padding: 24px 20px;
-        }
-        .footer-inner {
-          max-width: 1120px;
-          margin: 0 auto;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 12px;
-          text-align: center;
-        }
-        @media (min-width: 640px) {
-          .footer-inner {
-            flex-direction: row;
-            justify-content: space-between;
-            text-align: left;
-          }
-        }
-        .footer-copy { font-size: 0.8rem; color: #3f3f46; }
-        .footer-links {
-          display: flex;
-          gap: 20px;
-        }
-        .footer-links a {
-          font-size: 0.8rem;
-          color: #52525b;
-          text-decoration: none;
-          transition: color 0.2s;
-        }
-        .footer-links a:hover { color: #a1a1aa; }
       `}</style>
+
+      {/* ── Navbar ─────────────────────────────────────── */}
+      <header className="fixed top-0 inset-x-0 z-50 border-b border-white/5 bg-[#080810]/80 backdrop-blur-xl">
+        <div className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
+          <span className="font-display font-bold text-xl text-white tracking-tight">
+            Pay<span className="text-indigo-400">You</span>
+          </span>
+
+          <nav className="hidden md:flex items-center gap-8 text-sm text-zinc-400">
+            <a href="#features" className="hover:text-white transition-colors">
+              Features
+            </a>
+            <a href="#how" className="hover:text-white transition-colors">
+              How it works
+            </a>
+            <a href="#security" className="hover:text-white transition-colors">
+              Security
+            </a>
+          </nav>
+
+          <div className="flex items-center gap-2">
+            <Link
+              to="/login"
+              className="hidden sm:inline-flex px-4 py-2 text-sm text-zinc-400 hover:text-white transition-colors rounded-lg hover:bg-white/5"
+            >
+              Sign in
+            </Link>
+            <Link
+              to="/signup"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-400 rounded-lg transition-colors"
+            >
+              Get Started
+              <svg
+                viewBox="0 0 16 16"
+                fill="currentColor"
+                className="w-3.5 h-3.5"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M6.22 4.22a.75.75 0 011.06 0l3.25 3.25a.75.75 0 010 1.06l-3.25 3.25a.75.75 0 01-1.06-1.06L8.94 8 6.22 5.28a.75.75 0 010-1.06z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* ── Hero ───────────────────────────────────────── */}
+      <section className="relative min-h-screen flex items-center pt-16 overflow-hidden">
+        {/* Background layers */}
+        <div className="absolute inset-0 pointer-events-none">
+          {/* Radial glow */}
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-225 h-150 bg-indigo-600/10 rounded-full blur-[120px]" />
+          <div className="absolute top-1/3 left-1/4 w-100 h-100 bg-violet-600/8 rounded-full blur-[100px]" />
+          <div className="absolute bottom-0 right-1/4 w-75 h-75 bg-sky-500/8 rounded-full blur-[80px]" />
+
+          {/* Grid */}
+          <div
+            className="absolute inset-0 opacity-[0.04]"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px)",
+              backgroundSize: "72px 72px",
+            }}
+          />
+
+          {/* Diagonal accent line */}
+          <div className="absolute top-0 right-0 w-px h-full bg-linear-to-b from-transparent via-indigo-500/20 to-transparent" />
+        </div>
+
+        <div className="relative z-10 max-w-6xl mx-auto px-5 py-24 w-full">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left — copy */}
+            <div className="space-y-8">
+              {/* Badge */}
+              <div
+                data-reveal
+                className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-indigo-500/25 bg-indigo-500/8 text-xs font-medium text-indigo-300 tracking-wide uppercase"
+              >
+                <span className="relative flex h-2 w-2">
+                  <span className="pulse-ring absolute inline-flex h-full w-full rounded-full bg-indigo-400" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-400" />
+                </span>
+                Digital Wallet Platform
+              </div>
+
+              {/* Headline */}
+              <div data-reveal style={{ transitionDelay: "80ms" }}>
+                <h1 className="font-display font-bold text-5xl sm:text-6xl lg:text-[4.25rem] leading-[1.04] tracking-tight text-white">
+                  Money moves{" "}
+                  <span className="gradient-text">at the speed</span>{" "}
+                  <br className="hidden sm:block" />
+                  of a username.
+                </h1>
+              </div>
+
+              {/* Subheading */}
+              <p
+                data-reveal
+                style={{ transitionDelay: "140ms" }}
+                className="text-base sm:text-lg leading-relaxed text-zinc-400 max-w-lg"
+              >
+                PayYou is a digital wallet built for simplicity. Send money, top
+                up with a card, and track every transaction — from one clean,
+                secure dashboard.
+              </p>
+
+              {/* CTAs */}
+              <div
+                data-reveal
+                style={{ transitionDelay: "200ms" }}
+                className="flex flex-wrap gap-3"
+              >
+                <Link
+                  to="/signup"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold text-sm rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-500/25"
+                >
+                  Create Free Account
+                  <svg
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    className="w-4 h-4"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M6.22 4.22a.75.75 0 011.06 0l3.25 3.25a.75.75 0 010 1.06l-3.25 3.25a.75.75 0 01-1.06-1.06L8.94 8 6.22 5.28a.75.75 0 010-1.06z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </Link>
+                <Link
+                  to="/login"
+                  className="inline-flex items-center gap-2 px-6 py-3 border border-white/10 hover:border-white/20 text-zinc-300 hover:text-white font-medium text-sm rounded-xl transition-all duration-200 hover:bg-white/5"
+                >
+                  Sign In
+                </Link>
+              </div>
+
+              {/* Stats row */}
+              <div
+                data-reveal
+                style={{ transitionDelay: "260ms" }}
+                className="pt-2 flex flex-wrap gap-x-8 gap-y-4"
+              >
+                {stats.map((s) => (
+                  <div key={s.label}>
+                    <div className="font-display font-bold text-2xl text-white tracking-tight">
+                      {s.val}
+                    </div>
+                    <div className="text-xs text-zinc-500 mt-0.5">
+                      {s.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right — wallet card visual */}
+            <div
+              data-reveal
+              style={{ transitionDelay: "160ms" }}
+              className="relative flex items-center justify-center lg:justify-end"
+            >
+              <div className="relative w-72 sm:w-80">
+                {/* Glow behind card */}
+                <div className="absolute inset-0 bg-indigo-500/20 rounded-3xl blur-3xl scale-110" />
+
+                {/* Main wallet card */}
+                <div className="relative card-shine bg-linear-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] border border-white/10 rounded-3xl p-7 shadow-2xl">
+                  {/* Card top row */}
+                  <div className="flex items-center justify-between mb-8">
+                    <span className="font-display font-bold text-white text-base tracking-tight">
+                      Pay<span className="text-indigo-400">You</span>
+                    </span>
+                    <div className="flex gap-1.5">
+                      <div className="w-7 h-7 rounded-full bg-white/10" />
+                      <div className="w-7 h-7 rounded-full bg-indigo-400/40 -ml-3" />
+                    </div>
+                  </div>
+
+                  {/* Balance */}
+                  <div className="mb-7">
+                    <p className="text-[10px] uppercase tracking-[0.15em] text-zinc-500 mb-1.5">
+                      Total Balance
+                    </p>
+                    <p className="font-display font-bold text-3xl text-white tracking-tight">
+                      ₹24,850
+                      <span className="text-zinc-500 text-lg font-medium">
+                        .00
+                      </span>
+                    </p>
+                  </div>
+
+                  {/* Daily limit bar */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-[11px]">
+                      <span className="text-zinc-500">Daily limit used</span>
+                      <span className="text-zinc-300">₹4,200 / ₹10,000</span>
+                    </div>
+                    <div className="h-1.5 bg-white/8 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-linear-to-r from-indigo-500 to-violet-500 rounded-full"
+                        style={{ width: "42%" }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Card bottom */}
+                  <div className="mt-6 pt-5 border-t border-white/6 flex items-center justify-between">
+                    <div>
+                      <p className="text-[10px] text-zinc-600 uppercase tracking-widest">
+                        Card holder
+                      </p>
+                      <p className="text-sm text-zinc-300 font-medium mt-0.5">
+                        Sushil Kumar
+                      </p>
+                    </div>
+                    <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-zinc-400">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={1.5}
+                        className="w-5 h-5"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Floating pill — incoming */}
+                <div className="float-up absolute -left-10 sm:-left-16 top-8 flex items-center gap-3 bg-[#13131f] border border-white/8 rounded-2xl px-4 py-3 shadow-xl">
+                  <div className="w-8 h-8 rounded-full bg-emerald-500/15 flex items-center justify-center text-emerald-400 text-sm shrink-0">
+                    ↓
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-zinc-200">
+                      From @priya
+                    </p>
+                    <p className="text-[10px] text-zinc-500">2 min ago</p>
+                  </div>
+                  <span className="text-sm font-semibold text-emerald-400 ml-1">
+                    +₹1,200
+                  </span>
+                </div>
+
+                {/* Floating pill — outgoing */}
+                <div className="float-down absolute -right-8 sm:-right-12 bottom-12 flex items-center gap-3 bg-[#13131f] border border-white/8 rounded-2xl px-4 py-3 shadow-xl">
+                  <div className="w-8 h-8 rounded-full bg-red-500/12 flex items-center justify-center text-red-400 text-sm shrink-0">
+                    ↑
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-zinc-200">
+                      To @rahul
+                    </p>
+                    <p className="text-[10px] text-zinc-500">Just now</p>
+                  </div>
+                  <span className="text-sm font-semibold text-red-400 ml-1">
+                    −₹500
+                  </span>
+                </div>
+
+                {/* Spinning ring decoration */}
+                <div className="spin-slow absolute -bottom-8 -right-8 w-24 h-24 rounded-full border border-dashed border-indigo-500/20 pointer-events-none" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom fade */}
+        <div className="absolute bottom-0 inset-x-0 h-32 bg-linear-to-t from-[#080810] to-transparent pointer-events-none" />
+      </section>
+
+      {/* ── Divider strip ──────────────────────────────── */}
+      <div className="border-y border-white/5 bg-white/2 py-5">
+        <div className="max-w-6xl mx-auto px-5">
+          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-3 text-xs font-medium text-zinc-500 uppercase tracking-widest">
+            {[
+              "End-to-End Encrypted",
+              "Stripe Powered",
+              "Gemini AI",
+              "Zero Fees",
+              "Instant Settlement",
+            ].map((t) => (
+              <span key={t} className="flex items-center gap-2">
+                <span className="w-1 h-1 rounded-full bg-indigo-500" />
+                {t}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Features ───────────────────────────────────── */}
+      <section id="features" className="py-28 relative">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 right-0 w-125 h-125 bg-violet-600/6 rounded-full blur-[120px]" />
+        </div>
+
+        <div className="relative max-w-6xl mx-auto px-5">
+          <div className="max-w-2xl mb-16">
+            <p
+              data-reveal
+              className="text-xs font-semibold uppercase tracking-[0.18em] text-indigo-400 mb-4"
+            >
+              Features
+            </p>
+            <h2
+              data-reveal
+              style={{ transitionDelay: "60ms" }}
+              className="font-display font-bold text-4xl sm:text-5xl text-white leading-tight tracking-tight"
+            >
+              Built for speed.
+              <br />
+              <span className="text-zinc-500">Designed for clarity.</span>
+            </h2>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5 rounded-2xl overflow-hidden border border-white/5">
+            {features.map((f, i) => (
+              <div
+                key={f.title}
+                data-reveal
+                style={{ transitionDelay: `${i * 60}ms` }}
+                className="group bg-[#080810] hover:bg-white/2.5 p-7 transition-colors duration-300"
+              >
+                <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/15 flex items-center justify-center text-indigo-400 mb-5 group-hover:bg-indigo-500/15 transition-colors">
+                  {f.icon}
+                </div>
+                <h3 className="font-display font-semibold text-base text-white mb-2.5 tracking-tight">
+                  {f.title}
+                </h3>
+                <p className="text-sm leading-relaxed text-zinc-500 group-hover:text-zinc-400 transition-colors">
+                  {f.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── How it works ───────────────────────────────── */}
+      <section id="how" className="py-28 border-t border-white/5">
+        <div className="max-w-6xl mx-auto px-5">
+          <div className="max-w-2xl mb-16">
+            <p
+              data-reveal
+              className="text-xs font-semibold uppercase tracking-[0.18em] text-indigo-400 mb-4"
+            >
+              How it works
+            </p>
+            <h2
+              data-reveal
+              style={{ transitionDelay: "60ms" }}
+              className="font-display font-bold text-4xl sm:text-5xl text-white leading-tight tracking-tight"
+            >
+              Three steps to{" "}
+              <span className="text-zinc-500">your first transfer.</span>
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {steps.map((s, i) => (
+              <div
+                key={s.num}
+                data-reveal
+                style={{ transitionDelay: `${i * 100}ms` }}
+                className="relative"
+              >
+                {/* Connector line */}
+                {i < steps.length - 1 && (
+                  <div className="hidden md:block absolute top-7 left-[calc(100%+12px)] w-[calc(100%-24px)] h-px bg-linear-to-r from-white/10 to-transparent z-10" />
+                )}
+
+                <div className="card-shine bg-white/2.5 border border-white/8 rounded-2xl p-7 h-full hover:border-indigo-500/25 transition-colors duration-300">
+                  <div className="flex items-center gap-4 mb-6">
+                    <span className="font-display font-bold text-4xl text-indigo-500/25 leading-none tracking-tight">
+                      {s.num}
+                    </span>
+                    <div className="w-px h-8 bg-white/8" />
+                    <div className="w-2 h-2 rounded-full bg-indigo-400" />
+                  </div>
+                  <h3 className="font-display font-semibold text-lg text-white mb-3 tracking-tight">
+                    {s.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-zinc-500">
+                    {s.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Security section ───────────────────────────── */}
+      <section id="security" className="py-28 border-t border-white/5">
+        <div className="max-w-6xl mx-auto px-5">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left */}
+            <div>
+              <p
+                data-reveal
+                className="text-xs font-semibold uppercase tracking-[0.18em] text-indigo-400 mb-4"
+              >
+                Security
+              </p>
+              <h2
+                data-reveal
+                style={{ transitionDelay: "60ms" }}
+                className="font-display font-bold text-4xl sm:text-5xl text-white leading-tight tracking-tight mb-6"
+              >
+                Your money is{" "}
+                <span className="text-zinc-500">always protected.</span>
+              </h2>
+              <p
+                data-reveal
+                style={{ transitionDelay: "120ms" }}
+                className="text-base leading-relaxed text-zinc-400 mb-8"
+              >
+                PayYou is built with security at every layer — from how we store
+                your password to how we handle your card details. We never see
+                your card number. Ever.
+              </p>
+
+              <div
+                data-reveal
+                style={{ transitionDelay: "180ms" }}
+                className="space-y-3"
+              >
+                {[
+                  "Passwords hashed with bcrypt (12 salt rounds)",
+                  "Access tokens expire in 15 minutes",
+                  "Refresh tokens stored in httpOnly cookies only",
+                  "Card data handled exclusively by Stripe",
+                  "Webhook signature verification on every payment",
+                  "Atomic database transactions — no partial states",
+                ].map((item) => (
+                  <div
+                    key={item}
+                    className="flex items-center gap-3 text-sm text-zinc-400"
+                  >
+                    <div className="w-5 h-5 rounded-full bg-emerald-500/15 border border-emerald-500/25 flex items-center justify-center shrink-0">
+                      <svg
+                        viewBox="0 0 12 12"
+                        fill="currentColor"
+                        className="w-3 h-3 text-emerald-400"
+                      >
+                        <path d="M10.28 2.28L3.989 8.575 1.695 6.28A1 1 0 00.28 7.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 2.28z" />
+                      </svg>
+                    </div>
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right — visual */}
+            <div
+              data-reveal
+              style={{ transitionDelay: "100ms" }}
+              className="relative"
+            >
+              <div className="absolute inset-0 bg-indigo-500/10 rounded-3xl blur-3xl" />
+              <div className="relative card-shine bg-white/3 border border-white/8 rounded-3xl p-8 space-y-4">
+                {[
+                  {
+                    label: "Authentication",
+                    val: "JWT + Refresh Token",
+                    status: "secure",
+                  },
+                  {
+                    label: "Password Storage",
+                    val: "bcrypt hash",
+                    status: "secure",
+                  },
+                  {
+                    label: "Card Processing",
+                    val: "Stripe (PCI DSS L1)",
+                    status: "secure",
+                  },
+                  {
+                    label: "Data Transit",
+                    val: "TLS 1.3 encrypted",
+                    status: "secure",
+                  },
+                  {
+                    label: "Session Tokens",
+                    val: "httpOnly cookie",
+                    status: "secure",
+                  },
+                  {
+                    label: "Transactions",
+                    val: "Atomic DB operations",
+                    status: "secure",
+                  },
+                ].map((row) => (
+                  <div
+                    key={row.label}
+                    className="flex items-center justify-between py-3 border-b border-white/5 last:border-0"
+                  >
+                    <div>
+                      <p className="text-sm font-medium text-zinc-200">
+                        {row.label}
+                      </p>
+                      <p className="text-xs text-zinc-500 mt-0.5">{row.val}</p>
+                    </div>
+                    <span className="flex items-center gap-1.5 text-xs font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                      Secure
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA ────────────────────────────────────────── */}
+      <section className="py-28 border-t border-white/5">
+        <div className="max-w-3xl mx-auto px-5 text-center">
+          <div className="relative">
+            <div className="absolute inset-0 bg-indigo-500/10 rounded-full blur-[80px] pointer-events-none" />
+
+            <p
+              data-reveal
+              className="text-xs font-semibold uppercase tracking-[0.18em] text-indigo-400 mb-6"
+            >
+              Get Started Today
+            </p>
+            <h2
+              data-reveal
+              style={{ transitionDelay: "60ms" }}
+              className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl text-white leading-tight tracking-tight mb-6"
+            >
+              Your wallet is{" "}
+              <span className="gradient-text">one click away.</span>
+            </h2>
+            <p
+              data-reveal
+              style={{ transitionDelay: "120ms" }}
+              className="text-base text-zinc-400 leading-relaxed mb-10 max-w-xl mx-auto"
+            >
+              No setup fees. No hidden charges. Create your free PayYou wallet
+              in under a minute and start sending money instantly.
+            </p>
+
+            <div
+              data-reveal
+              style={{ transitionDelay: "180ms" }}
+              className="flex flex-wrap gap-3 justify-center"
+            >
+              <Link
+                to="/signup"
+                className="inline-flex items-center gap-2 px-8 py-3.5 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold text-sm rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-500/30"
+              >
+                Create Free Wallet
+                <svg
+                  viewBox="0 0 16 16"
+                  fill="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M6.22 4.22a.75.75 0 011.06 0l3.25 3.25a.75.75 0 010 1.06l-3.25 3.25a.75.75 0 01-1.06-1.06L8.94 8 6.22 5.28a.75.75 0 010-1.06z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </Link>
+              <Link
+                to="/login"
+                className="inline-flex items-center px-8 py-3.5 border border-white/10 hover:border-white/20 text-zinc-300 hover:text-white font-medium text-sm rounded-xl transition-all duration-200 hover:bg-white/5"
+              >
+                I have an account
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Footer ─────────────────────────────────────── */}
+      <footer className="border-t border-white/5 py-8">
+        <div className="max-w-6xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <span className="font-display font-bold text-lg text-white tracking-tight">
+            Pay<span className="text-indigo-400">You</span>
+          </span>
+          <p className="text-xs text-zinc-600">
+            © {new Date().getFullYear()} PayYou. All rights reserved.
+          </p>
+          <div className="flex gap-5 text-xs text-zinc-600">
+            <Link to="/login" className="hover:text-zinc-300 transition-colors">
+              Login
+            </Link>
+            <Link
+              to="/signup"
+              className="hover:text-zinc-300 transition-colors"
+            >
+              Sign Up
+            </Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

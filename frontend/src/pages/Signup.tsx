@@ -131,7 +131,7 @@ const Signup = () => {
             </label>
             <input
               {...register("fullName")}
-              placeholder="Sushil Kumar"
+              placeholder="Your name"
               className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500"
             />
             {errors.fullName && (
@@ -147,7 +147,7 @@ const Signup = () => {
             </label>
             <input
               {...register("username")}
-              placeholder="sushil123"
+              placeholder="user9876"
               className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500"
             />
             <div className="flex justify-between items-center mt-1">
@@ -169,7 +169,7 @@ const Signup = () => {
             <input
               {...register("email")}
               type="email"
-              placeholder="sushil@gmail.com"
+              placeholder="user@gmail.com"
               className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500"
             />
             <div className="flex justify-between items-center mt-1">
