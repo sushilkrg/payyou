@@ -9,9 +9,13 @@ import Transactions from "./pages/Transactions";
 import Settings from "./pages/Settings";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useRefreshOnLoad } from "./hooks/useRefreshOnLoad";
+import type { RootState } from "./store/store";
+import { useSelector } from "react-redux";
+import LandingPage from "./pages/LandingPage";
 
 function App() {
   const { isReady } = useRefreshOnLoad();
+  const isAuthenticated = useSelector((s: RootState) => s.auth.isAuthenticated);
 
   // Show nothing (or a spinner) until refresh attempt is done
   // Prevents a flash of the login page before token is restored
@@ -22,10 +26,21 @@ function App() {
       </div>
     );
   }
-  
+
   return (
     <BrowserRouter>
       <Routes>
+        <Route
+          path="/"
+          element={
+            isAuthenticated ? (
+              <Navigate to="/dashboard" replace />
+            ) : (
+              <LandingPage />
+            )
+          }
+        />
+
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/verify-otp" element={<VerifyOtp />} />
