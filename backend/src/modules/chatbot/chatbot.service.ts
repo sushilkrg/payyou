@@ -62,7 +62,7 @@ export const chatService = async (userId: string, data: ChatRequest) => {
 
   // ── Build Gemini model ─────────────────────────────────
   const model = gemini.getGenerativeModel({
-    model: "gemini-2.5-flash",
+    model: "gemini-2.5-flash-lite",
     systemInstruction: SYSTEM_PROMPT,
   });
 
