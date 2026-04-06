@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { toggleSidebar } from "../store/slices/uiSlice";
 import Sidebar from "./Sidebar";
+import ChatBot from "./ChatBot";
 
 interface Props {
   children: React.ReactNode;
@@ -31,6 +32,8 @@ const DashboardLayout = ({ children, title }: Props) => {
         {/* Page content */}
         <main className="flex-1 p-6">{children}</main>
       </div>
+      {/* Chatbot floats over all pages */}
+      <ChatBot />
     </div>
   );
 };
